@@ -1,0 +1,11 @@
+sql {
+driver = "rlm_sql_postgresql"
+dialect = "postgresql"
+
+# Connection info:
+server = "localhost"
+port = 5432
+login = "radius"
+password = "radtest2024"
+radius_db = "template1"
+}
