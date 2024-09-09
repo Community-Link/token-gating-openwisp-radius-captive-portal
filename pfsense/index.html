@@ -1,0 +1,9 @@
+<?php
+require_once("globals.inc");
+$request_uri = urldecode(str_replace("/index.php?zone={$_REQUEST['zone']}&redirurl=", "", $_SERVER["REQUEST_URI"]));
+$portal_redirurl = urldecode("$PORTAL_REDIRURL$");
+if(!stristr($portal_redirurl, $request_uri)) {
+     Header("Location: $PORTAL_REDIRURL$");
+     exit;
+}
+?>

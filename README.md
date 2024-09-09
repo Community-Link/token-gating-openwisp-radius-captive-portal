@@ -1,9 +1,11 @@
-# OpenWISP Captive Portal Setup
-This doc aim to help setup OpenWISP and a Captive Portal connected to Ethereum!
+# Community-Link Token-Gated Captive-Portal using OpenWISP & RADIUS
+This doc aim to document how to setup OpenWISP, freeRadius and pfSense to demonstrate a token gated captive portal with authentication using Ethereum.
 
 ## DEMO!
 
-XXX XXX XXX
+5m demo presentation with audio: https://vimeo.com/1007237463
+
+iPhone 90s demo: https://vimeo.com/1007432201
 
 ## GOAL
 Onboard web2 users on web3 by giving them the ability to login and pay for wireless Internet using crypto.
@@ -87,7 +89,8 @@ OpenWISP server. Our demo network use pfSense router nameserver with a custom ho
 ### OpenWISP WIFI Login page
 - https://github.com/openwisp/openwisp-wifi-login-pages
 
-XXX
+It is a very well done JavaScript Next.js project that provides an authentication web portal.
+
 
 ## pfSense Captive Portal SETUP for use with OpenWISP WIFI login page and RADIUS!
 pfSense is like OpenWRT but based on Linux and sold it's soul as an open-source project kinda like Redhat.
@@ -103,7 +106,9 @@ In theory, any captive portal that support RADIUS may be used with OpenWISP.
 ### pfSense Captive Portal SETUP
 https://docs.netgate.com/pfsense/en/latest/captiveportal/configuration.html
 
-XXX
+See all the screenshots under pfsense/ folder.
+
+Don't forget to upload the index.php custom portal HTML.
 
 #### How to setup pre-auth URL redirect to use a custom captive portal login page:
 https://www.reddit.com/r/PFSENSE/comments/qev64w/how_to_configure_captive_portal_preauthentication/
@@ -116,15 +121,17 @@ It is the most common way to do AAA for WIFI. Lots of open and proprietary softw
 
 It does everything we need to operate a WISP to authenticate users, enforce policies and do accounting.
 
-### How to use RADIUS auth with pfsense captive portal
-XXX
-
 ### freeRadius
 https://www.freeradius.org
 "the most widely used RADIUS server in the world."
 
-#### Config freeRadius with OpenWISP
-See repos /etc/freeradius for a complete dump of the working OpenWISP freeRaius integration (also with PostgreSQL).
+### How to use RADIUS auth with pfsense captive portal
+See this folder for the config we've used for freeRadius:
+https://github.com/Community-Link/token-gating-openwisp-radius-captive-portal/tree/main/etc/freeradius
+
+Also see this OpenWISP doc:
+https://openwisp-radius.readthedocs.io/en/stable/developer/freeradius.html
+
 
 #### Config freeRadius with WIFI login page
 This is the relevant section of the OpenWISP WIFI login page config file:
@@ -185,16 +192,22 @@ NOTE: the IP address of this server is whitelisted in pfSense captive portal
      and so are the domain names that are used by the client javascrip code!
 
 ### Whitelisted URLs for token gated portal
-XXX
+- auth.privy.io
+- bundler.biconomy.io
+- mainnet.optimism.io
+- mainnet.rpc.privy.systems
+- opt-mainnet.g.alchemy.com
+- relay.walletconnect.com
 
 ### ISSUE(s)
 - Privy blocks non localhost URL when using DEV keys!?
   WORKAROUND: ssh forward port 3000 to server and use http://localhost:3000
               works for testing but cannot be used on real captive portal redirection.
 
-- XXX LOGOUT?
 
-- XXX RADIUS SESSION STATs??
-
-## References
-- https://en.wikipedia.org/wiki/RADIUS
+## TODO(s)
+- Integrate with OpenWISP WIFI Login page
+- Implement Logout 
+  (req RADIUS session token using OpenWISP RADIUS API to POST to portal logout API)
+- Fix OpenWISP RADIUS Session Statistics (pfsense/captive portal speficic ROWs are incorrect?)
+- Implement login using wallet instead of using Privy/Biconomy
